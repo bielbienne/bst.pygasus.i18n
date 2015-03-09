@@ -36,11 +36,15 @@ setup(name='bb.extjs.i18n',
       install_requires=[
           'setuptools',
           'fanstatic',
-          'js.jed'
+          'zope.i18n',
+          'python-gettext',
+          'js.jed',
           
           # -*- Extra requirements: -*-
       ],
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
+      entry_points={
+        'fanstatic.libraries': [
+            'i18n = bb.extjs.i18n:library',
+            ],
+        },
       )
