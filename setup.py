@@ -38,7 +38,6 @@ setup(name='bb.extjs.i18n',
           'fanstatic',
           'zope.i18n',
           'python-gettext',
-          'js.jed',
           
           # -*- Extra requirements: -*-
       ],
