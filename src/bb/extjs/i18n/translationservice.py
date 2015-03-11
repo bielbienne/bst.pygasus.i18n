@@ -39,20 +39,19 @@ class I18nEntryPoint(component.MultiAdapter):
         td = queryUtility(ITranslationDomain, name=domain)
         if td is None:
             return
-        ret = dict()
-        for index, mofile in enumerate(td.getCatalogsInfo().get(lang, [])):
+        messages = dict()
+        ret = dict(info=dict(Domain=domain,
+                             Language=lang))
+        for mofile in td.getCatalogsInfo().get(lang, []):
             with open(mofile, 'rb') as fp:
-                tr = gettext.GNUTranslations(fp)
-                messages = {'': tr.info()}
                 # plural form is not supported at the moment, this
                 # why zope.i18n missing this support.
-                
-                # https://pokerpunks.googlecode.com/svn/trunk/jpoker-1.0.16/mo2json.py
+                tr = gettext.GNUTranslations(fp)
                 for k in tr._catalog.keys():
                     if k == '':
                         continue
-                    messages[k] = [tr._catalog[k]]
-            ret['messages_%s' % index] = messages
+                    messages[k] = tr._catalog[k]
+        ret['messages'] = messages
 
         self.request.response.write(json.dumps(ret))
 
