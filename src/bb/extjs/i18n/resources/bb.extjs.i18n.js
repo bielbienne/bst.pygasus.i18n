@@ -37,11 +37,11 @@
 
 
     i18n = function(domain) {
-        var data;
+        var data = null;
         var msgobjects = new Array();
         Ext.Ajax.request({
             url: location.href + '/i18n/' + domain,
-            noCache: true,
+            noCache: false,
             success: function(response, opts) {
                data = Ext.JSON.decode(response.responseText);
                filldata();
@@ -52,10 +52,13 @@
         });
         
         var filldata = function(){
-            if (!msgobjects.length)
+            if (!(msgobjects.length && data))
                 return;
             while( msgobj = msgobjects.pop() ) {
-                msgobj.setTranslation(data['messages'][msgobj.msgid]);
+                if ('msgobj.msgid' in data['messages'])
+                    msgobj.setTranslation(data['messages'][msgobj.msgid]);
+                else
+                    msgobj.setTranslation(null);
             }
         };
         
