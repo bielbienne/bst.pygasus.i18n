@@ -38,12 +38,12 @@ setup(name='bb.extjs.i18n',
           'fanstatic',
           'zope.i18n',
           'python-gettext',
-          
-          # -*- Extra requirements: -*-
       ],
-      entry_points={
-        'fanstatic.libraries': [
-            'i18n = bb.extjs.i18n:library',
-            ],
-        },
+      entry_points='''
+          [fanstatic.libraries]
+          i18n = bb.extjs.i18n:library
+          
+          [lingua.extractors]
+          extjs = bb.extjs.i18n.extractor:ExtjsExtractor
+      '''
       )

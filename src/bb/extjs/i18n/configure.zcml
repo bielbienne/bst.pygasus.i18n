@@ -5,6 +5,8 @@
   <include package="zope.i18n" file="meta.zcml" />
   <include package="zope.i18n" />
   
-  <grok:grok package="." />
+  <grok:grok
+      package="."
+      exclude="extractor" />
   
 </configure>
