@@ -20,10 +20,25 @@ class ExtjsExtractor(Extractor):
             domain = trim(domain)
             if options.domain is None or options.domain == domain:
                 factories.append(var)
+
+        # pre calculation to now with lineno the string was found
+        s = 0
+        linesum = list()
+        for line in data.split('\n'):
+            s += len(line)
+            linesum.append(s)
         for factory in factories:
             regex = re.compile(REGEX_MSG % factory)
             for match in regex.finditer(data):
                 msgid, default = match.groups()
                 msgid, default = trim(msgid), trim(default)
+                
+                # calculate lineno 
+                start = match.start()
+                for i, s in enumerate(linesum):
+                    lineno = i + 1
+                    if start < s:
+                        break
+
                 yield Message(None, msgid, None, [],
                               'Default: %s' % default, '', (filename, lineno))
