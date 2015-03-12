@@ -55,7 +55,7 @@
             if (!(msgobjects.length && data))
                 return;
             while( msgobj = msgobjects.pop() ) {
-                if ('msgobj.msgid' in data['messages'])
+                if (msgobj.msgid in data['messages'])
                     msgobj.setTranslation(data['messages'][msgobj.msgid]);
                 else
                     msgobj.setTranslation(null);
