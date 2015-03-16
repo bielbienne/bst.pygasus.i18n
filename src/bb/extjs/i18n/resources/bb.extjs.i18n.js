@@ -2,61 +2,74 @@
 
     var i18nMessageObject = function(msgid, defaultmsg, mapping){
 
-        this.setMapping = function(mapping){
-            self.mapping = mapping;
+        var private = { 
+                        msgid: undefined,
+                        defaultmsg: undefined,
+                        mapping: undefined,
+                        message: undefined
+                      };
+
+
+        this.getMapping = function(){
+            return private.mapping;
         };
 
-        this.setTranslation = function(message){
-            if (message){
-                self.message = message;
+        this.getMsgId = function(){
+            return private.msgid;
+        };
+
+        this.getDefaultMsg = function(){
+            return private.defaultmsg;
+        };
+
+        this.setMapping = function(new_mapping){
+            private.mapping = new_mapping;
+        };
+
+        this.setTranslation = function(new_message){
+            if (new_message) {
+                private.message = new_message;
             } else {
-                if (self.defaultmsg)
-                    self.message = self.defaultmsg;
+                if (private.defaultmsg)
+                    private.message = defaultmsg;
                 else
-                    self.message = self.msgid;
+                    private.message = msgid;
             }
         };
 
-        this.toString = function(){
-            re = self.message;
-            for(var key in self.mapping) {
-                re = re.replace('${' + key + '}', mapping[key]);
+        var _string = function(){
+            re = private.message;
+            for(var key in private.mapping) {
+                re = re.replace('${' + key + '}', private.mapping[key]);
             }
             return re;
         };
-        
-        var self = this;
-        if (!mapping)
-            mapping = {};
+        this.toString = _string;
+        this.valueOf = _string;
 
-        self.msgid = msgid;
-        self.message = null;
-        self.defaultmsg = defaultmsg;
-        self.setMapping(mapping);
+
+        if (!private.mapping)
+            private.mapping = {};
+
+        private.msgid = msgid;
+        private.message = null;
+        private.defaultmsg = defaultmsg;
+        this.setMapping(mapping);
+        this.setTranslation(null);
     };
+    i18nMessageObject.prototype.__proto__ = String.prototype;
 
 
+    var data = {};
     i18n = function(domain) {
-        var data = null;
         var msgobjects = new Array();
-        Ext.Ajax.request({
-            url: location.href + '/i18n/' + domain,
-            noCache: false,
-            success: function(response, opts) {
-               data = Ext.JSON.decode(response.responseText);
-               filldata();
-            },
-            failure: function(response, opts) {
-               console.log('server-side failure with status code ' + response.status);
-            }
-        });
-        
+
         var filldata = function(){
-            if (!(msgobjects.length && data))
+            if (!data[domain])
                 return;
             while( msgobj = msgobjects.pop() ) {
-                if (msgobj.msgid in data['messages'])
-                    msgobj.setTranslation(data['messages'][msgobj.msgid]);
+                if ( msgobj.getMsgId() in data[domain]['messages'])
+                    msgobj.setTranslation(data[domain]['messages'][msgobj.getMsgId()]);
                 else
                     msgobj.setTranslation(null);
             }
@@ -68,9 +81,30 @@
             filldata();
             return msgobj;
         };
+
+        if (domain in data){
+            filldata();
+        } else {
+            data[domain] = null;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', location.href + '/i18n/' + domain, true);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+                var status = xhr.status;
+                if (status == 200) {
+                    data[domain] = xhr.response;
+                    filldata();
+                } else {
+                    console.log('server-side failure with status code ' + status);
+                }
+            };
+            xhr.send();
+        }
         
         return i18nMessageFactory;
     };
+
 
 
 })(this);
