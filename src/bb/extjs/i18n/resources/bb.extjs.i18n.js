@@ -72,10 +72,8 @@
             while( msgobj = msgobjects[domain].pop() ) {
                 if ( msgobj.getMsgId() in data[domain]['messages'])
                     msgobj.setTranslation(data[domain]['messages'][msgobj.getMsgId()]);
-                else{
-                    console.debug(msgobj.getMsgId());
+                else
                     msgobj.setTranslation(null);
-                }
             }
         };
         
