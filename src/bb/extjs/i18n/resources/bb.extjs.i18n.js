@@ -60,6 +60,20 @@
     I18nMessageObject.prototype.__proto__ = String.prototype;
 
 
+    var retrieve_url = function() {
+        filename = 'bb.extjs.i18n';
+        pathname = 'fanstatic/i18n/';
+        var scripts = document.getElementsByTagName('script');
+        if (scripts && scripts.length > 0) {
+            for (var i in scripts) {
+                if (scripts[i].src && scripts[i].src.match(new RegExp(filename+'\\.js$'))) {
+                    return scripts[i].src.replace(new RegExp('(.*)'+pathname+filename+'\\.js$'), '$1');
+                }
+            }
+        }
+    };
+
+
     var data = {};
     var msgobjects = {};
     i18n = function(domain) {
@@ -90,7 +104,7 @@
             data[domain] = null;
 
             var xhr = new XMLHttpRequest();
-            xhr.open('get', location.href + '/i18n/' + domain, true);
+            xhr.open('get', retrieve_url() + 'i18n/' + domain, true);
             xhr.responseType = ''; // load as text and IE9 will be happy!
             xhr.onload = function() {
                 var status = xhr.status;
