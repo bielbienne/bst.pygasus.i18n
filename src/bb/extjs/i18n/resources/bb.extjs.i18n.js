@@ -1,6 +1,6 @@
 (function (root) {
 
-    var i18nMessageObject = function(msgid, defaultmsg, mapping){
+    var I18nMessageObject = function(msgid, defaultmsg, mapping){
 
         var private = { 
                         msgid: undefined,
@@ -57,27 +57,31 @@
         this.setMapping(mapping);
         this.setTranslation(null);
     };
-    i18nMessageObject.prototype.__proto__ = String.prototype;
+    I18nMessageObject.prototype.__proto__ = String.prototype;
 
 
     var data = {};
+    var msgobjects = {};
     i18n = function(domain) {
-        var msgobjects = new Array();
+        if (!(domain in msgobjects))
+            msgobjects[domain] = new Array();
 
         var filldata = function(){
             if (!data[domain])
                 return;
-            while( msgobj = msgobjects.pop() ) {
+            while( msgobj = msgobjects[domain].pop() ) {
                 if ( msgobj.getMsgId() in data[domain]['messages'])
                     msgobj.setTranslation(data[domain]['messages'][msgobj.getMsgId()]);
-                else
+                else{
+                    console.debug(msgobj.getMsgId());
                     msgobj.setTranslation(null);
+                }
             }
         };
         
         var i18nMessageFactory = function(msgid, defaultmsg, mapping){
-            var msgobj = new i18nMessageObject(msgid, defaultmsg, mapping);
-            msgobjects.push(msgobj);
+            var msgobj = new I18nMessageObject(msgid, defaultmsg, mapping);
+            msgobjects[domain].push(msgobj);
             filldata();
             return msgobj;
         };
@@ -89,11 +93,11 @@
 
             var xhr = new XMLHttpRequest();
             xhr.open('get', location.href + '/i18n/' + domain, true);
-            xhr.responseType = 'json';
+            xhr.responseType = ''; // load as text and IE9 will be happy!
             xhr.onload = function() {
                 var status = xhr.status;
                 if (status == 200) {
-                    data[domain] = xhr.response;
+                    data[domain] = JSON.parse(xhr.responseText);
                     filldata();
                 } else {
                     console.log('server-side failure with status code ' + status);
