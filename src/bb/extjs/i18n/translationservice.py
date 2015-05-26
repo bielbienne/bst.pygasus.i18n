@@ -16,23 +16,23 @@ from zope.i18n.interfaces import ITranslationDomain
 from zope.i18n.interfaces import IUserPreferredLanguages
 
 
-
 @component.implementer(IRootDispatcher)
 class I18nEntryPoint(component.MultiAdapter):
     """ Share translation strings from a .mo file as json to the
         application. Each domain can be reach separately.
     """
+
     component.name('i18n')
     component.adapts(IApplicationContext, IRequest)
 
     def __init__(self, context, request):
         self.context = context
         self.request = request
-    
+
     def __call__(self):
         #TODO available language must be configurable!!!
         lang = getUtility(INegotiator).getLanguage(['de', 'fr'], self.request)
-        self.request.response.content_type='application/json'
+        self.request.response.content_type = 'application/json'
 
         self.request.path_info_pop()
         domain = self.request.path_info_pop()
@@ -56,17 +56,14 @@ class I18nEntryPoint(component.MultiAdapter):
         self.request.response.write(json.dumps(ret))
 
 
-
 # https://grok-community-docs.readthedocs.org/en/latest/view_generation/i18n_of_your_app.html
 class DefaultUserPreferredLanguages(component.Adapter):
     """ A very simple adapter that return the user preferred language
         with the browser information (Accept-Language).
-        
     """
-    
+
     component.context(IRequest)
     component.implements(IUserPreferredLanguages)
 
     def getPreferredLanguages(self):
         return self.context.accept_language
-

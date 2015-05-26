@@ -5,6 +5,7 @@ from lingua.extractors import Extractor
 REGEX_MSG = r'''%s\(("(?:\\"|[^"])*"|'(?:\\'|[^'])*')[\s\n]*,[\s\n]*("(?:\\"|[^"])*"|'(?:\\'|[^'])*')'''
 REGEX_FACTORY = re.compile(r'''(\w(?:\w|[0-9])*)[\s\n]*=[\s\n]*i18n[\s\n]*\([\s\n]*("(?:\\"|[^"])*"|'(?:\\'|[^'])*')[\s\n]*\)''')
 
+
 class ExtjsExtractor(Extractor):
     '''Extjs sources'''
 
@@ -32,8 +33,8 @@ class ExtjsExtractor(Extractor):
             for match in regex.finditer(data):
                 msgid, default = match.groups()
                 msgid, default = trim(msgid), trim(default)
-                
-                # calculate lineno 
+
+                # calculate lineno
                 start = match.start()
                 for i, s in enumerate(linesum):
                     lineno = i + 1

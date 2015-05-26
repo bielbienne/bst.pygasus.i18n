@@ -21,15 +21,15 @@ setup(name='bb.extjs.i18n',
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
-        "Programming Language :: Python",
-        ],
+          "Programming Language :: Python",
+      ],
       keywords='',
       author='',
       author_email='',
       url='http://svn.plone.org/svn/collective/',
       license='lgpl',
       packages=find_packages('src'),
-      package_dir = {'': 'src'},
+      package_dir={'': 'src'},
       namespace_packages=['bb', 'bb.extjs'],
       include_package_data=True,
       zip_safe=False,
@@ -42,7 +42,7 @@ setup(name='bb.extjs.i18n',
       entry_points='''
           [fanstatic.libraries]
           i18n = bb.extjs.i18n:library
-          
+
           [lingua.extractors]
           extjs = bb.extjs.i18n.extractor:ExtjsExtractor
       '''
