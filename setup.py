@@ -14,7 +14,7 @@ long_description = (
     open('CHANGES.txt').read()
     + '\n')
 
-setup(name='bb.extjs.i18n',
+setup(name='bst.pygasus.i18n',
       version=version,
       description="",
       long_description=long_description,
@@ -30,7 +30,7 @@ setup(name='bb.extjs.i18n',
       license='lgpl',
       packages=find_packages('src'),
       package_dir={'': 'src'},
-      namespace_packages=['bb', 'bb.extjs'],
+      namespace_packages=['bb', 'bst.pygasus'],
       include_package_data=True,
       zip_safe=False,
       install_requires=[
@@ -41,9 +41,9 @@ setup(name='bb.extjs.i18n',
       ],
       entry_points='''
           [fanstatic.libraries]
-          i18n = bb.extjs.i18n:library
+          i18n = bst.pygasus.i18n:library
 
           [lingua.extractors]
-          extjs = bb.extjs.i18n.extractor:ExtjsExtractor
+          extjs = bst.pygasus.i18n.extractor:ExtjsExtractor
       '''
       )

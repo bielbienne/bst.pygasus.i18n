@@ -61,7 +61,7 @@
 
 
     var retrieve_url = function() {
-        filename = 'bb.extjs.i18n';
+        filename = 'bst.pygasus.i18n';
         pathname = 'fanstatic/i18n/';
         var scripts = document.getElementsByTagName('script');
         if (scripts && scripts.length > 0) {

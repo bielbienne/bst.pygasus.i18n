@@ -5,9 +5,9 @@ import gettext
 
 from grokcore import component
 
-from bb.extjs.wsgi.interfaces import IRequest
-from bb.extjs.wsgi.interfaces import IRootDispatcher
-from bb.extjs.core.interfaces import IApplicationContext
+from bst.pygasus.wsgi.interfaces import IRequest
+from bst.pygasus.wsgi.interfaces import IRootDispatcher
+from bst.pygasus.core.interfaces import IApplicationContext
 
 from zope.component import getUtility
 from zope.component import queryUtility
